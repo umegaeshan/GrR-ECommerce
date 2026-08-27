@@ -1,11 +1,47 @@
 import User from '../models/userModel.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { OAuth2Client } from 'google-auth-library';
 
 // Token එක හදන Function එක
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET , { expiresIn: '3d' })    
 };
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+export const googleAuth = async(req,res)=>{
+    try{
+        const {token} = req.body;
+
+        const ticket = await client.verifyIdToken({
+            idToken:token,
+            audience:process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const {name , email }= ticket.getPayload();
+
+        let user = await User.findOne({email});
+
+        if(!user)
+        {
+            const generatedPassword = Math.random().toString(36).slice(-8);
+            const salt = await bcrypt.getSalt(10);
+            const hashedPassword = await bcrypt.hash(generatedPassword,salt);
+
+            user = await User.create({name,email,password:hashedPassword});
+        }
+
+        res.status(200).json({name:user.name , email:user.email , token:generateToken(user._id)});
+
+    }
+    catch(error){
+        res.status(500).json({message:"Google Authentication Failed !!!"})
+    }
+};
+
+
+
 
 export const registerUser = async (req, res) => {
     try {
