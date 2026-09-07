@@ -10,15 +10,17 @@ const AdminDashboard = () => {
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
 
-  // Add/Edit Product Form States
+  // Product Form States (Main Image + Extra 3 Images)
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState(''); 
+  const [image2, setImage2] = useState(''); 
+  const [image3, setImage3] = useState(''); 
+  const [image4, setImage4] = useState(''); 
   const [category, setCategory] = useState('');
   const [countInStock, setCountInStock] = useState('');
   
-  // Edit කිරීම් හඳුනාගන්නා States
   const [editingProduct, setEditingProduct] = useState(null);
   const [editingUser, setEditingUser] = useState(null);
 
@@ -30,28 +32,24 @@ const AdminDashboard = () => {
   if (!user || !user.isAdmin) {
     return (
       <div className="text-center p-10 mt-10">
-        <h2 className="text-2xl text-red-600 font-bold">Access Denied!</h2>
-        <button onClick={() => navigate('/')} className="mt-4 bg-gray-900 text-white px-4 py-2 rounded">Home Page</button>
+        <h2 className="text-2xl text-red-600 font-bold">Access Denied! You do not have permission to view this page.</h2>
+        <button onClick={() => navigate('/')} className="mt-4 bg-gray-900 text-white px-4 py-2 rounded">Go to Home Page</button>
       </div>
     );
   }
 
   const config = { headers: { Authorization: `Bearer ${user.token}` } };
 
-  // Data Fetching
   const fetchProducts = () => axios.get('http://localhost:5000/api/products').then((res) => setProducts(res.data));
   const fetchUsers = () => axios.get('http://localhost:5000/api/users', config).then((res) => setUsers(res.data));
 
   useEffect(() => {
     if (activeTab === 'manageProducts') fetchProducts();
     if (activeTab === 'manageUsers') fetchUsers();
-    
-    // Tab එක මාරු වෙද්දී Edit වෙන එක cancel කරනවා
     setEditingProduct(null);
     setEditingUser(null);
   }, [activeTab]);
 
-  // --- Products Functions ---
   const deleteProduct = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
@@ -69,7 +67,10 @@ const AdminDashboard = () => {
     setName(product.name);
     setDescription(product.description);
     setPrice(product.price);
-    setImage(product.image);
+    setImage(product.image || '');
+    setImage2(product.images && product.images[0] ? product.images[0] : '');
+    setImage3(product.images && product.images[1] ? product.images[1] : '');
+    setImage4(product.images && product.images[2] ? product.images[2] : '');
     setCategory(product.category);
     setCountInStock(product.countInStock);
   };
@@ -77,27 +78,34 @@ const AdminDashboard = () => {
   const submitProductHandler = async (e) => {
     e.preventDefault();
     try {
-      const productData = { name, description, price: Number(price), image, category, countInStock: Number(countInStock) };
+      const imagesArray = [image2, image3, image4].filter(img => img.trim() !== '');
+
+      const productData = { 
+        name, 
+        description, 
+        price: Number(price), 
+        image, 
+        images: imagesArray, 
+        category, 
+        countInStock: Number(countInStock) 
+      };
       
       if (editingProduct) {
-        // Update Product
         await axios.put(`http://localhost:5000/api/products/${editingProduct}`, productData, config);
         alert('Product updated successfully!');
         setEditingProduct(null);
-        fetchProducts(); // Fetch the updated product list
+        fetchProducts();
       } else {
-        // Add Product
         await axios.post('http://localhost:5000/api/products', productData, config);
         alert('Product added successfully!');
       }
       
-      setName(''); setDescription(''); setPrice(''); setImage(''); setCategory(''); setCountInStock('');
+      setName(''); setDescription(''); setPrice(''); setImage(''); setImage2(''); setImage3(''); setImage4(''); setCategory(''); setCountInStock('');
     } catch (error) {
-      alert('Failed to add product!');
+      alert('Operation failed!');
     }
   };
 
-  // --- Users Functions ---
   const handleEditUserClick = (usr) => {
     setEditingUser(usr._id);
     setEditUserName(usr.name);
@@ -111,7 +119,6 @@ const AdminDashboard = () => {
       await axios.put(`http://localhost:5000/api/users/${editingUser}`, { 
         name: editUserName, email: editUserEmail, isAdmin: editUserIsAdmin 
       }, config);
-      
       alert('User updated successfully!');
       setEditingUser(null);
       fetchUsers();
@@ -121,7 +128,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto font-sans min-h-[75vh]">
+    <div className="p-8 max-w-6xl mx-auto font-sans min-h-[75vh] pt-12">
       <div className="flex justify-between items-center mb-6 border-b pb-4">
         <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
         <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-bold">Admin Mode</span>
@@ -142,9 +149,16 @@ const AdminDashboard = () => {
             <form onSubmit={submitProductHandler} className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div><label className="block text-gray-700 font-bold mb-2">Name</label><input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full px-3 py-2 border rounded" /></div>
               <div><label className="block text-gray-700 font-bold mb-2">Price</label><input type="number" value={price} onChange={(e) => setPrice(e.target.value)} required className="w-full px-3 py-2 border rounded" /></div>
-              <div><label className="block text-gray-700 font-bold mb-2">Image URL</label><input type="text" value={image} onChange={(e) => setImage(e.target.value)} required className="w-full px-3 py-2 border rounded" /></div>
+              
+              <div><label className="block text-gray-700 font-bold mb-2">Main Image URL</label><input type="text" value={image} onChange={(e) => setImage(e.target.value)} required className="w-full px-3 py-2 border rounded" /></div>
               <div><label className="block text-gray-700 font-bold mb-2">Category</label><input type="text" value={category} onChange={(e) => setCategory(e.target.value)} required className="w-full px-3 py-2 border rounded" /></div>
+              
+              <div><label className="block text-gray-700 font-bold mb-2">Extra Image 1 (URL)</label><input type="text" value={image2} onChange={(e) => setImage2(e.target.value)} className="w-full px-3 py-2 border rounded" /></div>
+              <div><label className="block text-gray-700 font-bold mb-2">Extra Image 2 (URL)</label><input type="text" value={image3} onChange={(e) => setImage3(e.target.value)} className="w-full px-3 py-2 border rounded" /></div>
+              <div><label className="block text-gray-700 font-bold mb-2">Extra Image 3 (URL)</label><input type="text" value={image4} onChange={(e) => setImage4(e.target.value)} className="w-full px-3 py-2 border rounded" /></div>
+              
               <div><label className="block text-gray-700 font-bold mb-2">Count in Stock</label><input type="number" value={countInStock} onChange={(e) => setCountInStock(e.target.value)} required className="w-full px-3 py-2 border rounded" /></div>
+
               <div className="md:col-span-2"><label className="block text-gray-700 font-bold mb-2">Description</label><textarea value={description} onChange={(e) => setDescription(e.target.value)} rows="3" required className="w-full px-3 py-2 border rounded"></textarea></div>
               <div className="md:col-span-2"><button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded">Add Product</button></div>
             </form>
@@ -156,14 +170,16 @@ const AdminDashboard = () => {
           <div>
             <h2 className="text-xl font-bold mb-6 text-gray-700 border-b pb-2">Manage Products</h2>
             
-            {/* භාණ්ඩ Edit කරන Form එක පෙන්වීම */}
             {editingProduct ? (
                <div className="mb-8 p-4 border-2 border-blue-200 bg-blue-50 rounded">
                  <h3 className="font-bold mb-4">Edit Product</h3>
                  <form onSubmit={submitProductHandler} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div><label className="text-sm font-bold">Name</label><input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full px-2 py-1 border rounded" /></div>
                     <div><label className="text-sm font-bold">Price</label><input type="number" value={price} onChange={(e) => setPrice(e.target.value)} required className="w-full px-2 py-1 border rounded" /></div>
-                    <div><label className="text-sm font-bold">Image URL</label><input type="text" value={image} onChange={(e) => setImage(e.target.value)} required className="w-full px-2 py-1 border rounded" /></div>
+                    <div><label className="text-sm font-bold">Main Image URL</label><input type="text" value={image} onChange={(e) => setImage(e.target.value)} required className="w-full px-2 py-1 border rounded" /></div>
+                    <div><label className="text-sm font-bold">Extra Image 1</label><input type="text" value={image2} onChange={(e) => setImage2(e.target.value)} className="w-full px-2 py-1 border rounded" /></div>
+                    <div><label className="text-sm font-bold">Extra Image 2</label><input type="text" value={image3} onChange={(e) => setImage3(e.target.value)} className="w-full px-2 py-1 border rounded" /></div>
+                    <div><label className="text-sm font-bold">Extra Image 3</label><input type="text" value={image4} onChange={(e) => setImage4(e.target.value)} className="w-full px-2 py-1 border rounded" /></div>
                     <div><label className="text-sm font-bold">Count in Stock</label><input type="number" value={countInStock} onChange={(e) => setCountInStock(e.target.value)} required className="w-full px-2 py-1 border rounded" /></div>
                     <div className="flex gap-2 mt-4 md:col-span-2">
                       <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded font-bold">Update</button>
@@ -177,7 +193,7 @@ const AdminDashboard = () => {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-gray-100 border-b">
-                    <th className="p-3">Image</th><th className="p-3">Name</th><th className="p-3">Price</th><th className="p-3">Count in Stock</th><th className="p-3">Actions</th>
+                    <th className="p-3">Image</th><th className="p-3">Name</th><th className="p-3">Price</th><th className="p-3">Stock</th><th className="p-3">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -204,7 +220,6 @@ const AdminDashboard = () => {
           <div>
             <h2 className="text-xl font-bold mb-6 text-gray-700 border-b pb-2">Manage Users</h2>
             
-            {/* User Edit කරන Form එක පෙන්වීම */}
             {editingUser ? (
                <div className="mb-8 p-4 border-2 border-yellow-200 bg-yellow-50 rounded">
                  <h3 className="font-bold mb-4">Edit User</h3>

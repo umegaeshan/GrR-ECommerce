@@ -11,52 +11,13 @@ import ProductDetails from './pages/ProductDetails';
 import AdminDashboard from './pages/AdminDashboard';
 import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
+import Navbar from './components/Navbar';
 
-// Navigation Bar එක වෙනම Component එකක් විදිහට හැදුවා (ලේසි වෙන්න)
-const Navigation = () => {
-  const navigate = useNavigate();
-
-  // LocalStorage එකෙන් ලොගින් වෙලා ඉන්න කෙනාගේ විස්තර ගන්නවා
-  const user = JSON.parse(localStorage.getItem('userInfo'));
-
-  const handleLogout = () => {
-    localStorage.removeItem('userInfo');
-    window.location.href = '/login'; // navigate වෙනුවට මෙය යොදන්න
-  };
-
-  return (
-    <nav className="bg-gray-900 text-white p-4 shadow-md flex justify-between items-center">
-      <div className="text-xl font-bold tracking-wider">GrR</div>
-      <div className="flex gap-6 items-center">
-        <Link to="/" className="hover:text-gray-300 transition">Home</Link>
-        <Link to="/cart" className="hover:text-gray-300 transition">Cart</Link>
-        {user && user.isAdmin && (
-          <Link to="/admin" className="text-yellow-400 hover:text-yellow-300 font-bold transition">Admin Panel</Link>
-        )}
-
-        {/* User කෙනෙක් ඉන්නවා නම් නම සහ Logout බටන් එක පෙන්නනවා, නැත්නම් Login ලින්ක් එක පෙන්නනවා */}
-        {user ? (
-          <div className="flex items-center gap-4">
-            <span className="text-green-400 font-semibold">Hi, {user.name}</span>
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 hover:bg-red-500 text-sm px-3 py-1 rounded transition"
-            >
-              Logout
-            </button>
-          </div>
-        ) : (
-          <Link to="/login" className="hover:text-gray-300 transition">Login</Link>
-        )}
-      </div>
-    </nav>
-  );
-};
 
 function App() {
   return (
     <BrowserRouter>
-      <Navigation />
+    <Navbar/>
       <div className="bg-gray-50 min-h-screen">
         <Routes>
           <Route path="/login" element={<Login />} />
