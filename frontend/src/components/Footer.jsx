@@ -6,10 +6,10 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
         <div>
           <h3 className="text-xl font-bold text-white mb-4">GrR E-Commerce</h3>
-          <p className="text-sm">Beyond the Limits. ඔබට අවශ්‍ය උසස්ම තත්ත්වයේ ක්‍රීඩා සහ නවීන භාණ්ඩ එකම තැනකින්.</p>
+          <p className="text-sm">Beyond the Limits. The highest quality games and modern goods you need in one place.</p>
         </div>
         <div>
-          <h3 className="text-xl font-bold text-white mb-4">සබැඳි (Links)</h3>
+          <h3 className="text-xl font-bold text-white mb-4">Links</h3>
           <ul className="flex flex-col gap-2">
             <li><Link to="/" className="hover:text-white transition">Home</Link></li>
             <li><Link to="/about" className="hover:text-white transition">About Us</Link></li>
@@ -17,7 +17,7 @@ const Footer = () => {
           </ul>
         </div>
         <div>
-          <h3 className="text-xl font-bold text-white mb-4">අපව සම්බන්ධ කරගන්න</h3>
+          <h3 className="text-xl font-bold text-white mb-4">Contact Us</h3>
           <p className="text-sm">Email: support@grr.com</p>
           <p className="text-sm">Phone: +94 77 123 4567</p>
         </div>
