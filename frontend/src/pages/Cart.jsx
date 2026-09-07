@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -19,17 +20,34 @@ const Cart = () => {
   // මුළු මුදල ගණනය කිරීම
   const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
 
+  const handleCheckout = async () => {
+    try {
+      // Backend එකට Cart එකේ භාණ්ඩ යවා Stripe ලින්ක් එක ලබාගැනීම
+      const response = await axios.post('http://localhost:5000/api/stripe/create-checkout-session', {
+        cartItems,
+      });
+
+      // ලැබුණු Stripe ලින්ක් එකට Browser එක redirect කිරීම
+      if (response.data.url) {
+        window.location.href = response.data.url;
+      }
+    } catch (error) {
+      console.error("Checkout Error:", error);
+      alert("ගෙවීම් ක්‍රියාවලිය ආරම්භ කිරීමේදී දෝෂයක් මතු විය.");
+    }
+  };
+
   return (
     <div className="p-8 font-sans">
       <h2 className="text-3xl font-bold mb-6 text-gray-900">ඔබේ සාප්පු කරත්තය (Cart)</h2>
-      
+
       {cartItems.length === 0 ? (
         <div className="text-center p-10 bg-white rounded-lg shadow">
           <p className="text-gray-500 text-lg">ඔබේ කරත්තය හිස්ව ඇත.</p>
         </div>
       ) : (
         <div className="flex flex-col lg:flex-row gap-8">
-          
+
           {/* භාණ්ඩ ලැයිස්තුව */}
           <div className="flex-1">
             {cartItems.map((item) => (
@@ -41,7 +59,7 @@ const Cart = () => {
                     <p className="text-green-600 font-semibold">රු. {item.price}</p>
                   </div>
                 </div>
-                <button 
+                <button
                   onClick={() => removeFromCart(item._id)}
                   className="text-red-500 hover:text-red-700 font-bold"
                 >
@@ -58,7 +76,10 @@ const Cart = () => {
               <span className="text-gray-600">භාණ්ඩ ({cartItems.length}):</span>
               <span className="font-bold">රු. {totalPrice}</span>
             </div>
-            <button className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded transition">
+            <button
+              onClick={handleCheckout}
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded transition"
+            >
               Checkout (මිලදී ගන්න)
             </button>
           </div>
