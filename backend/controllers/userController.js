@@ -23,16 +23,21 @@ export const googleAuth = async(req,res)=>{
 
         let user = await User.findOne({email});
 
-        if(!user)
+       if(!user)
         {
             const generatedPassword = Math.random().toString(36).slice(-8);
-            const salt = await bcrypt.getSalt(10);
+            const salt = await bcrypt.genSalt(10); // getSalt වෙනුවට genSalt විය යුතුයි
             const hashedPassword = await bcrypt.hash(generatedPassword,salt);
 
             user = await User.create({name,email,password:hashedPassword});
         }
 
-        res.status(200).json({name:user.name , email:user.email , token:generateToken(user._id)});
+        res.status(200).json({
+            name:user.name, 
+            email:user.email, 
+            isAdmin: user.isAdmin, // <--- මේ පේළිය අලුතින් දැම්මා
+            token:generateToken(user._id)
+        });
 
     }
     catch(error){
@@ -75,7 +80,12 @@ export const loginUser = async (req, res) => {
 
         // User ඉන්නවා නම් සහ Password එක හරි නම්
         if (user && (await bcrypt.compare(password, user.password))) {
-            res.status(200).json({ name: user.name, email: user.email, token: generateToken(user._id) });
+            res.status(200).json({ 
+                name: user.name, 
+                email: user.email, 
+                isAdmin: user.isAdmin, // <--- මේ පේළිය අලුතින් දැම්මා
+                token: generateToken(user._id) 
+            });
         } else {
             // වැරදි නම් 400 error එකක් දෙනවා
             res.status(400).json({ message: "Invalid Name or Password !!" });

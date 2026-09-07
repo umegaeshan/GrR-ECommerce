@@ -6,7 +6,15 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('userInfo'));
 
-  // Admin කෙනෙක් නෙවෙයි නම් මේ පිටුවට එන්න දෙන්නේ නැහැ
+  // 1. සියලුම State Hooks අනිවාර්යයෙන්ම උඩින්ම තියන්න ඕනේ
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [image, setImage] = useState('');
+  const [category, setCategory] = useState('');
+  const [countInStock, setCountInStock] = useState('');
+
+  // 2. ඊට පස්සේ තමයි Admin ද කියලා බලන Condition එක දාන්නේ
   if (!user || !user.isAdmin) {
     return (
       <div className="text-center p-10 mt-10">
@@ -17,13 +25,6 @@ const AdminDashboard = () => {
       </div>
     );
   }
-
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [image, setImage] = useState('');
-  const [category, setCategory] = useState('');
-  const [countInStock, setCountInStock] = useState('');
 
   // භාණ්ඩය Database එකට යවන Function එක
   const submitHandler = async (e) => {

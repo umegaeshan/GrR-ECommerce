@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); // ලොගින් වුණාම වෙනත් පිටුවකට යවන්න
+  const navigate = useNavigate();
 
   // 1. සාමාන්‍ය Login ක්‍රියාවලිය
   const handleNormalLogin = async (e) => {
@@ -15,10 +15,16 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:5000/api/users/login', { name, password });
       
-      // ආපු Token එක සහ විස්තර Browser එකේ සේව් කරනවා
       localStorage.setItem('userInfo', JSON.stringify(response.data));
       alert('Successfully logged in!');
-      navigate('/'); // Home පිටුවට යවනවා
+      
+      // Admin කෙනෙක් නම් කෙලින්ම Admin Dashboard එකට යවනවා
+      if (response.data.isAdmin) {
+        navigate('/admin');
+      } else {
+        navigate('/'); // සාමාන්‍ය කෙනෙක් නම් Home පිටුවට යවනවා
+      }
+      
     } catch (error) {
       alert('Invalid User Credentials!');
     }
@@ -28,12 +34,19 @@ const Login = () => {
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       const response = await axios.post('http://localhost:5000/api/users/google', {
-        token: credentialResponse.credential, // Google එකෙන් දෙන token එක Backend එකට යවනවා
+        token: credentialResponse.credential,
       });
       
       localStorage.setItem('userInfo', JSON.stringify(response.data));
       alert('Successfully logged in with Google!');
-      navigate('/');
+      
+      // මෙතනදිත් Admin ද කියලා බලලා අදාළ පිටුවට යවනවා
+     if (response.data.isAdmin) {
+        window.location.href = '/admin'; // <--- මේක වෙනස් කරන්න
+      } else {
+        window.location.href = '/'; // <--- මේක වෙනස් කරන්න
+      }
+      
     } catch (error) {
       alert('Google login failed!');
     }
@@ -72,7 +85,7 @@ const Login = () => {
             Login
           </button>
           <div className="mt-6 text-center text-sm">
-          අලුත් ගිණුමක් අවශ්‍යද? <Link to="/register" className="text-blue-600 hover:underline">Register වෙන්න</Link>
+          Create New Account? <Link to="/register" className="text-blue-600 hover:underline">Register</Link>
         </div>
         </form>
 

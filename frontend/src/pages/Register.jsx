@@ -20,11 +20,10 @@ const handleRegister = async (e) => {
       // මෙතන තිබුණ localStorage.setItem(...) පේළිය අනිවාර්යයෙන්ම අයින් කළ යුතුයි!
       // එසේ නොකළහොත් Register වූ ගමන් පද්ධතිය ඔහුව Logged In කෙනෙක් ලෙස සලකයි.
 
-      alert('සාර්ථකව ලියාපදිංචි වුණා! කරුණාකර දැන් Login වෙන්න.');
-      navigate('/login'); // කෙලින්ම Login පිටුවට යවනවා
-      
+      alert('Successfully registered! Please login.');
+      window.location.href = '/login'; // navigate වෙනුවට මෙය යොදන්න
     } catch (error) {
-      alert(error.response?.data?.message || 'ලියාපදිංචි වීම අසාර්ථකයි!');
+      alert(error.response?.data?.message || 'Registration failed!');
     }
   };
 
@@ -39,7 +38,7 @@ const handleRegister = async (e) => {
             <input 
               type="text" 
               className="w-full px-3 py-2 border rounded focus:outline-none focus:border-gray-900" 
-              placeholder="ඔබේ නම"
+              placeholder="Your Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required 
@@ -50,18 +49,18 @@ const handleRegister = async (e) => {
             <input 
               type="email" 
               className="w-full px-3 py-2 border rounded focus:outline-none focus:border-gray-900" 
-              placeholder="Email ලිපිනය"
+              placeholder="Email Address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required 
             />
           </div>
           <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2">මුරපදය (Password)</label>
+            <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
             <input 
               type="password" 
               className="w-full px-3 py-2 border rounded focus:outline-none focus:border-gray-900" 
-              placeholder="මුරපදය"
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required 
@@ -73,7 +72,7 @@ const handleRegister = async (e) => {
         </form>
 
         <div className="mt-4 text-center text-sm">
-          දැනටමත් ගිණුමක් තිබේද? <Link to="/login" className="text-blue-600 hover:underline">Login වෙන්න</Link>
+          Already have an account? <Link to="/login" className="text-blue-600 hover:underline">Login Now</Link>
         </div>
       </div>
     </div>

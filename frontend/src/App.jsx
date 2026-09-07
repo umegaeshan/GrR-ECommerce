@@ -20,8 +20,8 @@ const Navigation = () => {
   const user = JSON.parse(localStorage.getItem('userInfo'));
 
   const handleLogout = () => {
-    localStorage.removeItem('userInfo'); // විස්තර මකා දමනවා
-    navigate('/login'); // ආයෙත් Login පිටුවට යවනවා
+    localStorage.removeItem('userInfo');
+    window.location.href = '/login'; // navigate වෙනුවට මෙය යොදන්න
   };
 
   return (
