@@ -7,6 +7,7 @@ import Success from './pages/Success';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Footer from './components/Footer';
+import ProductDetails from './pages/ProductDetails';
 
 // Navigation Bar එක වෙනම Component එකක් විදිහට හැදුවා (ලේසි වෙන්න)
 const Navigation = () => {
@@ -58,6 +59,7 @@ function App() {
           <Route path="/success" element={<Success />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
         </Routes>
       </div>
       <Footer />
