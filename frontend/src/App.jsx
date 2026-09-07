@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Cart from './pages/Cart';
 import './index.css';
+import Success from './pages/Success';
 
 // Navigation Bar එක වෙනම Component එකක් විදිහට හැදුවා (ලේසි වෙන්න)
 const Navigation = () => {
@@ -51,6 +52,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/success" element={<Success />} />
         </Routes>
       </div>
     </BrowserRouter>
