@@ -41,3 +41,38 @@ export const getProductById = async (req, res) => {
         res.status(500).json({ message: "Invalid ID or server error" });
     }
 };
+
+
+
+export const deleteProduct = async (req, res) => {
+    try {
+        await Product.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: "භාණ්ඩය සාර්ථකව මකා දමන ලදී" });
+    } catch (error) {
+        res.status(500).json({ message: "භාණ්ඩය මකා දැමීම අසාර්ථකයි" });
+    }
+};
+
+
+export const updateProduct = async (req, res) => {
+    try {
+        const { name, description, price, image, category, countInStock } = req.body;
+        const product = await Product.findById(req.params.id);
+
+        if (product) {
+            product.name = name;
+            product.description = description;
+            product.price = price;
+            product.image = image;
+            product.category = category;
+            product.countInStock = countInStock;
+
+            const updatedProduct = await product.save();
+            res.status(200).json(updatedProduct);
+        } else {
+            res.status(404).json({ message: "භාණ්ඩය සොයාගත නොහැකි විය" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

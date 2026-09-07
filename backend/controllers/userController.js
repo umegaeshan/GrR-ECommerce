@@ -95,3 +95,33 @@ export const loginUser = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+
+export const getUsers = async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+export const updateUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+
+        if (user) {
+            user.name = req.body.name || user.name;
+            user.email = req.body.email || user.email;
+            user.isAdmin = req.body.isAdmin; // Admin බලතල දීම හෝ ඉවත් කිරීම
+
+            const updatedUser = await user.save();
+            res.status(200).json(updatedUser);
+        } else {
+            res.status(404).json({ message: "පරිශීලකයා සොයාගත නොහැකි විය" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
