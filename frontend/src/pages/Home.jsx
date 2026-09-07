@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 const Home = () => {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
+
     const fetchProducts = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/products');
@@ -15,7 +19,7 @@ const Home = () => {
       }
     };
     fetchProducts();
-  }, []);
+  }, [navigate]);
 
   // භාණ්ඩ Cart එකට එකතු කරන Function එක
   const addToCart = (product) => {

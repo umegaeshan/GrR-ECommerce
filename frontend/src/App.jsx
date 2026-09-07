@@ -8,6 +8,9 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Footer from './components/Footer';
 import ProductDetails from './pages/ProductDetails';
+import AdminDashboard from './pages/AdminDashboard';
+import Register from './pages/Register';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // Navigation Bar එක වෙනම Component එකක් විදිහට හැදුවා (ලේසි වෙන්න)
 const Navigation = () => {
@@ -27,6 +30,9 @@ const Navigation = () => {
       <div className="flex gap-6 items-center">
         <Link to="/" className="hover:text-gray-300 transition">Home</Link>
         <Link to="/cart" className="hover:text-gray-300 transition">Cart</Link>
+        {user && user.isAdmin && (
+          <Link to="/admin" className="text-yellow-400 hover:text-yellow-300 font-bold transition">Admin Panel</Link>
+        )}
 
         {/* User කෙනෙක් ඉන්නවා නම් නම සහ Logout බටන් එක පෙන්නනවා, නැත්නම් Login ලින්ක් එක පෙන්නනවා */}
         {user ? (
@@ -53,13 +59,17 @@ function App() {
       <Navigation />
       <div className="bg-gray-50 min-h-screen">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/cart" element={<Cart />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/success" element={<Success />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/register" element={<Register />} />
+
+          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+            <Route path="/success" element={<ProtectedRoute><Success /></ProtectedRoute>} />
+            <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
+            <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
+            <Route path="/product/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+          
         </Routes>
       </div>
       <Footer />

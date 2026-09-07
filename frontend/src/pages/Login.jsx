@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -70,6 +71,9 @@ const Login = () => {
           <button type="submit" className="w-full bg-gray-900 text-white font-bold py-2 px-4 rounded hover:bg-gray-800 transition">
             Login
           </button>
+          <div className="mt-6 text-center text-sm">
+          අලුත් ගිණුමක් අවශ්‍යද? <Link to="/register" className="text-blue-600 hover:underline">Register වෙන්න</Link>
+        </div>
         </form>
 
         {/* Google සහ සාමාන්‍ය Login වෙන් කරන ඉර */}
