@@ -30,7 +30,7 @@ const Home = () => {
        // 3. අලුත් භාණ්ඩය ලිස්ට් එකට එකතු කරලා සේව් කරනවා
        cartItems.push({ ...product, qty: 1 });
        localStorage.setItem('cartItems', JSON.stringify(cartItems));
-       alert('සාර්ථකව Cart එකට එකතු කළා!');
+       alert('Product added successfully to cart!');
     }
   };
 

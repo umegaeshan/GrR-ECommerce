@@ -16,10 +16,10 @@ const Login = () => {
       
       // ආපු Token එක සහ විස්තර Browser එකේ සේව් කරනවා
       localStorage.setItem('userInfo', JSON.stringify(response.data));
-      alert('සාර්ථකව ලොගින් වුණා!');
+      alert('Successfully logged in!');
       navigate('/'); // Home පිටුවට යවනවා
     } catch (error) {
-      alert('නම හෝ මුරපදය වැරදියි!');
+      alert('Invalid User Credentials!');
     }
   };
 
@@ -31,10 +31,10 @@ const Login = () => {
       });
       
       localStorage.setItem('userInfo', JSON.stringify(response.data));
-      alert('Google හරහා සාර්ථකව ලොගින් වුණා!');
+      alert('Successfully logged in with Google!');
       navigate('/');
     } catch (error) {
-      alert('Google ලොගින් වීම අසාර්ථකයි!');
+      alert('Google login failed!');
     }
   };
 
@@ -50,7 +50,7 @@ const Login = () => {
             <input 
               type="text" 
               className="w-full px-3 py-2 border rounded focus:outline-none focus:border-gray-900" 
-              placeholder="ඔබේ නම ඇතුළත් කරන්න"
+              placeholder="Enter your name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required 
@@ -61,7 +61,7 @@ const Login = () => {
             <input 
               type="password" 
               className="w-full px-3 py-2 border rounded focus:outline-none focus:border-gray-900" 
-              placeholder="මුරපදය ඇතුළත් කරන්න"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required 
@@ -75,7 +75,7 @@ const Login = () => {
         {/* Google සහ සාමාන්‍ය Login වෙන් කරන ඉර */}
         <div className="flex items-center my-4">
           <div className="flex-grow border-t border-gray-300"></div>
-          <span className="mx-4 text-gray-500 text-sm">හෝ</span>
+          <span className="mx-4 text-gray-500 text-sm">or</span>
           <div className="flex-grow border-t border-gray-300"></div>
         </div>
 
@@ -84,7 +84,7 @@ const Login = () => {
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
             onError={() => {
-              alert('Google Login අසාර්ථකයි');
+              alert('Google login failed!');
             }}
           />
         </div>
