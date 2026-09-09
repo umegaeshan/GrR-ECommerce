@@ -1,6 +1,5 @@
 import Product from "../models/productModel.js";
 
-
 export const getProduct = async(req,res)=>{
     try{
         const products = await Product.find({});
@@ -9,35 +8,31 @@ export const getProduct = async(req,res)=>{
     catch(error){
         res.status(500).json({message:error.message})
     }
-    
 }
 
-export const createProduct = async(req,res)=>{
-    try{
-        // Frontend එකෙන් එවන user සහ images (array) එකත් මෙතනට ගන්නවා
-        const {name, description, price, image, images, category, countInStock, user} = req.body;
+export const createProduct = async (req, res) => {
+    try {
+        const { name, description, price, image, images, category, countInStock } = req.body;
 
         const product = await Product.create({
-            user, // Model එකේ required නිසා මේක අනිවාර්යයි
+            user: req.user._id,
             name,
-            description, 
-            price, 
-            image, 
-            images, // අමතර පින්තූර ටික
-            category, 
+            description,
+            price,
+            image,
+            images: images || [], // අමතර පින්තූර ටික
+            category,
             countInStock
         });
-        res.status(200).json(product);
-    }
-    catch(error){
-        res.status(500).json({message:error.message});
+
+        res.status(201).json(product);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
 
-// 3. තනි භාණ්ඩයක විස්තර ලබා ගැනීම (Get Single Product)
 export const getProductById = async (req, res) => {
     try {
-        // URL එකෙන් එන ID එක පාවිච්චි කරලා Database එකෙන් භාණ්ඩය හොයනවා
         const product = await Product.findById(req.params.id);
         
         if (product) {
@@ -50,8 +45,6 @@ export const getProductById = async (req, res) => {
     }
 };
 
-
-
 export const deleteProduct = async (req, res) => {
     try {
         await Product.findByIdAndDelete(req.params.id);
@@ -61,10 +54,9 @@ export const deleteProduct = async (req, res) => {
     }
 };
 
-
 export const updateProduct = async (req, res) => {
     try {
-        const { name, description, price, image, category, countInStock } = req.body;
+        const { name, description, price, image, images, category, countInStock } = req.body;
         const product = await Product.findById(req.params.id);
 
         if (product) {
@@ -72,6 +64,7 @@ export const updateProduct = async (req, res) => {
             product.description = description;
             product.price = price;
             product.image = image;
+            product.images = images || []; // අමතර පින්තූර යාවත්කාලීන කිරීම
             product.category = category;
             product.countInStock = countInStock;
 

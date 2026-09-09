@@ -14,13 +14,13 @@ const AdminDashboard = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-  const [image, setImage] = useState(''); 
-  const [image2, setImage2] = useState(''); 
-  const [image3, setImage3] = useState(''); 
-  const [image4, setImage4] = useState(''); 
+  const [image, setImage] = useState('');
+  const [image2, setImage2] = useState('');
+  const [image3, setImage3] = useState('');
+  const [image4, setImage4] = useState('');
   const [category, setCategory] = useState('');
   const [countInStock, setCountInStock] = useState('');
-  
+
   const [editingProduct, setEditingProduct] = useState(null);
   const [editingUser, setEditingUser] = useState(null);
 
@@ -80,17 +80,17 @@ const AdminDashboard = () => {
     try {
       const imagesArray = [image2, image3, image4].filter(img => img.trim() !== '');
 
-      const productData = { 
+      const productData = {
         user: user._id, // <--- මේ පේළිය අනිවාර්යයෙන්ම එකතු කරන්න
-        name, 
-        description, 
-        price: Number(price), 
-        image, 
-        images: imagesArray, 
-        category, 
-        countInStock: Number(countInStock) 
+        name,
+        description,
+        price: Number(price),
+        image,
+        images: imagesArray,
+        category,
+        countInStock: Number(countInStock)
       };
-      
+
       if (editingProduct) {
         await axios.put(`http://localhost:5000/api/products/${editingProduct}`, productData, config);
         alert('Product updated successfully!');
@@ -100,13 +100,25 @@ const AdminDashboard = () => {
         await axios.post('http://localhost:5000/api/products', productData, config);
         alert('Product added successfully!');
       }
-      
+
       setName(''); setDescription(''); setPrice(''); setImage(''); setImage2(''); setImage3(''); setImage4(''); setCategory(''); setCountInStock('');
     } catch (error) {
       alert('Operation failed!');
     }
   };
-  
+
+  const deleteUserAction = async (id) => {
+    if (window.confirm('Are you sure you want to delete this user?')) {
+      try {
+        await axios.delete(`http://localhost:5000/api/users/${id}`, config);
+        setUsers(users.filter((u) => u._id !== id));
+        alert('User deleted successfully!');
+      } catch (error) {
+        alert('Failed to delete user!');
+      }
+    }
+  };
+
   const handleEditUserClick = (usr) => {
     setEditingUser(usr._id);
     setEditUserName(usr.name);
@@ -117,8 +129,8 @@ const AdminDashboard = () => {
   const submitUserHandler = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/api/users/${editingUser}`, { 
-        name: editUserName, email: editUserEmail, isAdmin: editUserIsAdmin 
+      await axios.put(`http://localhost:5000/api/users/${editingUser}`, {
+        name: editUserName, email: editUserEmail, isAdmin: editUserIsAdmin
       }, config);
       alert('User updated successfully!');
       setEditingUser(null);
@@ -142,7 +154,7 @@ const AdminDashboard = () => {
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
-        
+
         {/* 1. Add Product Tab */}
         {activeTab === 'addProduct' && (
           <div>
@@ -150,14 +162,14 @@ const AdminDashboard = () => {
             <form onSubmit={submitProductHandler} className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div><label className="block text-gray-700 font-bold mb-2">Name</label><input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full px-3 py-2 border rounded" /></div>
               <div><label className="block text-gray-700 font-bold mb-2">Price</label><input type="number" value={price} onChange={(e) => setPrice(e.target.value)} required className="w-full px-3 py-2 border rounded" /></div>
-              
+
               <div><label className="block text-gray-700 font-bold mb-2">Main Image URL</label><input type="text" value={image} onChange={(e) => setImage(e.target.value)} required className="w-full px-3 py-2 border rounded" /></div>
               <div><label className="block text-gray-700 font-bold mb-2">Category</label><input type="text" value={category} onChange={(e) => setCategory(e.target.value)} required className="w-full px-3 py-2 border rounded" /></div>
-              
+
               <div><label className="block text-gray-700 font-bold mb-2">Extra Image 1 (URL)</label><input type="text" value={image2} onChange={(e) => setImage2(e.target.value)} className="w-full px-3 py-2 border rounded" /></div>
               <div><label className="block text-gray-700 font-bold mb-2">Extra Image 2 (URL)</label><input type="text" value={image3} onChange={(e) => setImage3(e.target.value)} className="w-full px-3 py-2 border rounded" /></div>
               <div><label className="block text-gray-700 font-bold mb-2">Extra Image 3 (URL)</label><input type="text" value={image4} onChange={(e) => setImage4(e.target.value)} className="w-full px-3 py-2 border rounded" /></div>
-              
+
               <div><label className="block text-gray-700 font-bold mb-2">Count in Stock</label><input type="number" value={countInStock} onChange={(e) => setCountInStock(e.target.value)} required className="w-full px-3 py-2 border rounded" /></div>
 
               <div className="md:col-span-2"><label className="block text-gray-700 font-bold mb-2">Description</label><textarea value={description} onChange={(e) => setDescription(e.target.value)} rows="3" required className="w-full px-3 py-2 border rounded"></textarea></div>
@@ -170,24 +182,24 @@ const AdminDashboard = () => {
         {activeTab === 'manageProducts' && (
           <div>
             <h2 className="text-xl font-bold mb-6 text-gray-700 border-b pb-2">Manage Products</h2>
-            
+
             {editingProduct ? (
-               <div className="mb-8 p-4 border-2 border-blue-200 bg-blue-50 rounded">
-                 <h3 className="font-bold mb-4">Edit Product</h3>
-                 <form onSubmit={submitProductHandler} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label className="text-sm font-bold">Name</label><input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full px-2 py-1 border rounded" /></div>
-                    <div><label className="text-sm font-bold">Price</label><input type="number" value={price} onChange={(e) => setPrice(e.target.value)} required className="w-full px-2 py-1 border rounded" /></div>
-                    <div><label className="text-sm font-bold">Main Image URL</label><input type="text" value={image} onChange={(e) => setImage(e.target.value)} required className="w-full px-2 py-1 border rounded" /></div>
-                    <div><label className="text-sm font-bold">Extra Image 1</label><input type="text" value={image2} onChange={(e) => setImage2(e.target.value)} className="w-full px-2 py-1 border rounded" /></div>
-                    <div><label className="text-sm font-bold">Extra Image 2</label><input type="text" value={image3} onChange={(e) => setImage3(e.target.value)} className="w-full px-2 py-1 border rounded" /></div>
-                    <div><label className="text-sm font-bold">Extra Image 3</label><input type="text" value={image4} onChange={(e) => setImage4(e.target.value)} className="w-full px-2 py-1 border rounded" /></div>
-                    <div><label className="text-sm font-bold">Count in Stock</label><input type="number" value={countInStock} onChange={(e) => setCountInStock(e.target.value)} required className="w-full px-2 py-1 border rounded" /></div>
-                    <div className="flex gap-2 mt-4 md:col-span-2">
-                      <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded font-bold">Update</button>
-                      <button type="button" onClick={() => setEditingProduct(null)} className="bg-gray-400 text-white px-4 py-2 rounded font-bold">Cancel</button>
-                    </div>
-                 </form>
-               </div>
+              <div className="mb-8 p-4 border-2 border-blue-200 bg-blue-50 rounded">
+                <h3 className="font-bold mb-4">Edit Product</h3>
+                <form onSubmit={submitProductHandler} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div><label className="text-sm font-bold">Name</label><input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full px-2 py-1 border rounded" /></div>
+                  <div><label className="text-sm font-bold">Price</label><input type="number" value={price} onChange={(e) => setPrice(e.target.value)} required className="w-full px-2 py-1 border rounded" /></div>
+                  <div><label className="text-sm font-bold">Main Image URL</label><input type="text" value={image} onChange={(e) => setImage(e.target.value)} required className="w-full px-2 py-1 border rounded" /></div>
+                  <div><label className="text-sm font-bold">Extra Image 1</label><input type="text" value={image2} onChange={(e) => setImage2(e.target.value)} className="w-full px-2 py-1 border rounded" /></div>
+                  <div><label className="text-sm font-bold">Extra Image 2</label><input type="text" value={image3} onChange={(e) => setImage3(e.target.value)} className="w-full px-2 py-1 border rounded" /></div>
+                  <div><label className="text-sm font-bold">Extra Image 3</label><input type="text" value={image4} onChange={(e) => setImage4(e.target.value)} className="w-full px-2 py-1 border rounded" /></div>
+                  <div><label className="text-sm font-bold">Count in Stock</label><input type="number" value={countInStock} onChange={(e) => setCountInStock(e.target.value)} required className="w-full px-2 py-1 border rounded" /></div>
+                  <div className="flex gap-2 mt-4 md:col-span-2">
+                    <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded font-bold">Update</button>
+                    <button type="button" onClick={() => setEditingProduct(null)} className="bg-gray-400 text-white px-4 py-2 rounded font-bold">Cancel</button>
+                  </div>
+                </form>
+              </div>
             ) : null}
 
             <div className="overflow-x-auto">
@@ -220,21 +232,21 @@ const AdminDashboard = () => {
         {activeTab === 'manageUsers' && (
           <div>
             <h2 className="text-xl font-bold mb-6 text-gray-700 border-b pb-2">Manage Users</h2>
-            
+
             {editingUser ? (
-               <div className="mb-8 p-4 border-2 border-yellow-200 bg-yellow-50 rounded">
-                 <h3 className="font-bold mb-4">Edit User</h3>
-                 <form onSubmit={submitUserHandler} className="flex flex-wrap gap-4 items-end">
-                    <div><label className="text-sm font-bold block">Name</label><input type="text" value={editUserName} onChange={(e) => setEditUserName(e.target.value)} required className="px-2 py-1 border rounded" /></div>
-                    <div><label className="text-sm font-bold block">Email</label><input type="email" value={editUserEmail} onChange={(e) => setEditUserEmail(e.target.value)} required className="px-2 py-1 border rounded" /></div>
-                    <div className="flex items-center mb-2">
-                      <input type="checkbox" checked={editUserIsAdmin} onChange={(e) => setEditUserIsAdmin(e.target.checked)} className="mr-2" />
-                      <label className="font-bold">Grant Admin Privileges</label>
-                    </div>
-                    <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded font-bold h-fit">Update</button>
-                    <button type="button" onClick={() => setEditingUser(null)} className="bg-gray-400 text-white px-4 py-2 rounded font-bold h-fit">Cancel</button>
-                 </form>
-               </div>
+              <div className="mb-8 p-4 border-2 border-yellow-200 bg-yellow-50 rounded">
+                <h3 className="font-bold mb-4">Edit User</h3>
+                <form onSubmit={submitUserHandler} className="flex flex-wrap gap-4 items-end">
+                  <div><label className="text-sm font-bold block">Name</label><input type="text" value={editUserName} onChange={(e) => setEditUserName(e.target.value)} required className="px-2 py-1 border rounded" /></div>
+                  <div><label className="text-sm font-bold block">Email</label><input type="email" value={editUserEmail} onChange={(e) => setEditUserEmail(e.target.value)} required className="px-2 py-1 border rounded" /></div>
+                  <div className="flex items-center mb-2">
+                    <input type="checkbox" checked={editUserIsAdmin} onChange={(e) => setEditUserIsAdmin(e.target.checked)} className="mr-2" />
+                    <label className="font-bold">Grant Admin Privileges</label>
+                  </div>
+                  <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded font-bold h-fit">Update</button>
+                  <button type="button" onClick={() => setEditingUser(null)} className="bg-gray-400 text-white px-4 py-2 rounded font-bold h-fit">Cancel</button>
+                </form>
+              </div>
             ) : null}
 
             <div className="overflow-x-auto">
@@ -252,6 +264,10 @@ const AdminDashboard = () => {
                       <td className="p-3">{u.isAdmin ? <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-bold">Yes</span> : <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm font-bold">No</span>}</td>
                       <td className="p-3">
                         <button onClick={() => handleEditUserClick(u)} className="bg-blue-500 text-white px-3 py-1 rounded font-bold text-sm">Edit</button>
+                      </td>
+                      <td className="p-3 flex gap-2">
+                        <button onClick={() => handleEditUserClick(u)} className="bg-blue-500 text-white px-3 py-1 rounded font-bold text-sm">Edit</button>
+                        <button onClick={() => deleteUserAction(u._id)} className="bg-red-500 text-white px-3 py-1 rounded font-bold text-sm">Delete</button>
                       </td>
                     </tr>
                   ))}
