@@ -26,20 +26,26 @@ export const googleAuth = async(req,res)=>{
         if(!user)
         {
             const generatedPassword = Math.random().toString(36).slice(-8);
-            const salt = await bcrypt.getSalt(10);
+            const salt = await bcrypt.genSalt(10); 
             const hashedPassword = await bcrypt.hash(generatedPassword,salt);
 
             user = await User.create({name,email,password:hashedPassword});
         }
 
-        res.status(200).json({name:user.name , email:user.email , token:generateToken(user._id)});
+        res.status(200).json({
+            name:user.name, 
+            email:user.email, 
+            isAdmin: user.isAdmin, 
+            token:generateToken(user._id)
+        });
 
     }
     catch(error){
+        // Terminal එකේ ඇත්තම Error එක පෙන්නන්න මේ පේළිය දැම්මා
+        console.error("Google Auth Backend Error:", error); 
         res.status(500).json({message:"Google Authentication Failed !!!"})
     }
 };
-
 
 
 
@@ -75,7 +81,12 @@ export const loginUser = async (req, res) => {
 
         // User ඉන්නවා නම් සහ Password එක හරි නම්
         if (user && (await bcrypt.compare(password, user.password))) {
-            res.status(200).json({ name: user.name, email: user.email, token: generateToken(user._id) });
+            res.status(200).json({ 
+                name: user.name, 
+                email: user.email, 
+                isAdmin: user.isAdmin, // <--- මේ පේළිය අලුතින් දැම්මා
+                token: generateToken(user._id) 
+            });
         } else {
             // වැරදි නම් 400 error එකක් දෙනවා
             res.status(400).json({ message: "Invalid Name or Password !!" });
@@ -85,3 +96,43 @@ export const loginUser = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+
+export const getUsers = async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+export const updateUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+
+        if (user) {
+            user.name = req.body.name || user.name;
+            user.email = req.body.email || user.email;
+            user.isAdmin = req.body.isAdmin; // Admin බලතල දීම හෝ ඉවත් කිරීම
+
+            const updatedUser = await user.save();
+            res.status(200).json(updatedUser);
+        } else {
+            res.status(404).json({ message: "පරිශීලකයා සොයාගත නොහැකි විය" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+export const deleteUser = async (req, res) => {
+    try {
+        await User.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: "පරිශීලකයා සාර්ථකව මකා දමන ලදී" });
+    } catch (error) {
+        res.status(500).json({ message: "පරිශීලකයා මකා දැමීම අසාර්ථකයි" });
+    }
+};
