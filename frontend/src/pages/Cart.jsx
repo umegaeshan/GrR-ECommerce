@@ -47,7 +47,7 @@ const Cart = () => {
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto font-sans min-h-[75vh]">
+    <div className="p-8 max-w-6xl mx-auto font-sans min-h-[75vh] pt-36">
       <h2 className="text-3xl font-extrabold mb-8 text-gray-900 border-b pb-4">Shopping Cart</h2>
       
       {cartItems.length === 0 ? (

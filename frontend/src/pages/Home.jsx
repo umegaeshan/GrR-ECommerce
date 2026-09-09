@@ -31,7 +31,7 @@ const Home = () => {
   };
 
   return (
-    <div className="font-sans text-gray-800 bg-gray-50 min-h-screen">
+    <div className="font-sans text-gray-800 bg-gray-50 min-h-screen ">
       
       {/* 1. Modern Hero Section (Background Image සහිතව) */}
       <div 

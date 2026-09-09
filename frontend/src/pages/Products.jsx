@@ -18,8 +18,8 @@ const Products = () => {
   }, []);
 
   return (
-    <div className="p-8 font-sans text-gray-800 max-w-7xl mx-auto min-h-[75vh] pt-12">
-      <h1 className="text-3xl font-extrabold text-gray-900 mb-8 border-b pb-4">සියලුම භාණ්ඩ (All Products)</h1>
+    <div className="p-8 font-sans text-gray-800 max-w-7xl mx-auto min-h-[75vh] pt-40">
+      <h1 className="text-3xl font-extrabold text-gray-900 mb-8 border-b pb-4">All Products</h1>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {products.map((product) => (
@@ -73,7 +73,7 @@ const Products = () => {
         {/* භාණ්ඩ කිසිවක් නොමැති නම් පෙන්වන පණිවිඩය */}
         {products.length === 0 && (
           <div className="col-span-full text-center py-10">
-            <p className="text-gray-500 text-lg">දැනට භාණ්ඩ කිසිවක් නොමැත.</p>
+            <p className="text-gray-500 text-lg">No products available.</p>
           </div>
         )}
       </div>
