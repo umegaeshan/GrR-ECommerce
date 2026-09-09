@@ -11,7 +11,7 @@ const Home = () => {
         const response = await axios.get('http://localhost:5000/api/products');
         setProducts(response.data);
       } catch (error) {
-        console.error("Products ගෙන ඒමේදී දෝෂයක්:", error);
+        console.error("Products Fetching Error:", error);
       }
     };
     fetchProducts();
@@ -22,7 +22,7 @@ const Home = () => {
     const existItem = cartItems.find((x) => x._id === product._id);
     
     if (existItem) {
-       alert('මේ භාණ්ඩය දැනටමත් Cart එකේ ඇත!');
+       alert('Thus product is already in your cart!');
     } else {
        cartItems.push({ ...product, qty: 1 });
        localStorage.setItem('cartItems', JSON.stringify(cartItems));

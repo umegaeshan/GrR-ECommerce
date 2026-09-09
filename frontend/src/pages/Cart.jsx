@@ -96,7 +96,7 @@ const Cart = () => {
                     onClick={() => removeFromCart(item._id)}
                     className="text-red-500 hover:text-red-700 font-bold text-sm bg-red-50 px-3 py-2 rounded-lg transition"
                   >
-                    ඉවත් කරන්න
+                    Delete
                   </button>
                 </div>
 
@@ -110,7 +110,7 @@ const Cart = () => {
             
             <div className="flex justify-between mb-3 text-gray-600">
               <span>Item Queantity ({totalItemsCount}):</span>
-              <span className="font-bold text-gray-800">රු. {totalPrice}</span>
+              <span className="font-bold text-gray-800">Rs. {totalPrice}</span>
             </div>
             <div className="flex justify-between mb-4 text-gray-600 border-b pb-4">
               <span>Delivary Fee :</span>
@@ -119,7 +119,7 @@ const Cart = () => {
             
             <div className="flex justify-between mb-6 text-lg font-extrabold text-gray-900">
               <span>Totale Prices:</span>
-              <span className="text-green-600">රු. {totalPrice}</span>
+              <span className="text-green-600">Rs. {totalPrice}</span>
             </div>
 
             <button 

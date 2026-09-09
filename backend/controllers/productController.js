@@ -14,10 +14,18 @@ export const getProduct = async(req,res)=>{
 
 export const createProduct = async(req,res)=>{
     try{
-        const{name,description, price, image, category, countInStock}=req.body;
+        // Frontend එකෙන් එවන user සහ images (array) එකත් මෙතනට ගන්නවා
+        const {name, description, price, image, images, category, countInStock, user} = req.body;
 
         const product = await Product.create({
-            name,description, price, image, category, countInStock,
+            user, // Model එකේ required නිසා මේක අනිවාර්යයි
+            name,
+            description, 
+            price, 
+            image, 
+            images, // අමතර පින්තූර ටික
+            category, 
+            countInStock
         });
         res.status(200).json(product);
     }

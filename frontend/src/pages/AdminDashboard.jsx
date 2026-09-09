@@ -81,6 +81,7 @@ const AdminDashboard = () => {
       const imagesArray = [image2, image3, image4].filter(img => img.trim() !== '');
 
       const productData = { 
+        user: user._id, // <--- මේ පේළිය අනිවාර්යයෙන්ම එකතු කරන්න
         name, 
         description, 
         price: Number(price), 
@@ -105,7 +106,7 @@ const AdminDashboard = () => {
       alert('Operation failed!');
     }
   };
-
+  
   const handleEditUserClick = (usr) => {
     setEditingUser(usr._id);
     setEditUserName(usr.name);
