@@ -16,10 +16,10 @@ export const createCheckoutSession = async (req, res) => {
                 product_data: { 
                     name: item.name 
                 },
-                // Stripe මුදල ගණනය කරන්නේ ශත (cents) වලින් නිසා 100 න් ගුණ කරයි
-                unit_amount: item.price * 100, 
+                // Math.round යෙදීම අනිවාර්යයි! (දශම අගයන් ඉවත් කර පූර්ණ සංඛ්‍යා සෑදීමට)
+                unit_amount: Math.round(Number(item.price) * 100), 
             },
-            quantity: item.qty,
+            quantity: Number(item.qty),
         }));
 
         // Stripe Checkout පිටුවක් නිර්මාණය කිරීම
@@ -27,13 +27,14 @@ export const createCheckoutSession = async (req, res) => {
             payment_method_types: ['card'],
             line_items: lineItems,
             mode: 'payment',
-            success_url: 'http://localhost:5173/success', // ගෙවීම සාර්ථක වූ පසු යන පිටුව
-            cancel_url: 'http://localhost:5173/cart',     // ගෙවීම අවලංගු කළහොත් එන පිටුව
+            success_url: 'http://localhost:5173/success', 
+            cancel_url: 'http://localhost:5173/cart',     
         });
 
         // සෑදූ Checkout ලින්ක් එක Frontend එකට යැවීම
         res.status(200).json({ url: session.url });
     } catch (error) {
+        console.error("Stripe Backend Error:", error); // Terminal එකේ ඇත්ත දෝෂය පෙන්වීමට
         res.status(500).json({ message: error.message });
     }
 };

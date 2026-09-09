@@ -42,7 +42,8 @@ const Cart = () => {
       }
     } catch (error) {
       console.error("Checkout Error:", error);
-      alert("Error occurred while initiating checkout.");
+      // Backend එකෙන් එවන ඇත්තම දෝෂය Alert එකක් ලෙස පෙන්වීම
+      alert(error.response?.data?.message || "Error occurred while initiating checkout.");
     }
   };
 

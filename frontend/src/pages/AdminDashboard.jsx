@@ -141,7 +141,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto font-sans min-h-[75vh] pt-12">
+    <div className="p-8 max-w-6xl mx-auto font-sans min-h-[75vh] pt-30">
       <div className="flex justify-between items-center mb-6 border-b pb-4">
         <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
         <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-bold">Admin Mode</span>

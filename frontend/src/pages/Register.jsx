@@ -28,7 +28,7 @@ const handleRegister = async (e) => {
   };
 
   return (
-    <div className="flex justify-center items-center h-[80vh]">
+    <div className="flex justify-center items-center h-[80vh] pt-40">
       <div className="bg-white p-8 rounded-xl shadow-md w-96 border border-gray-100">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Register Now </h2>
         
