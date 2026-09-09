@@ -66,7 +66,7 @@ const Home = () => {
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {products.map((product) => (
+          {products.slice(0, 4).map((product) => (
             <div 
               key={product._id} 
               className="group bg-white rounded-2xl shadow-sm hover:shadow-2xl overflow-hidden transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 relative flex flex-col"

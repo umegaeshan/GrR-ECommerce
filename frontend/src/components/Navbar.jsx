@@ -24,6 +24,8 @@ const Navbar = () => {
         {/* 2. Nav Links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-200">
           <Link to="/" className="hover:text-cyan-400 transition-colors">Home</Link>
+          {/* අලුතින් එකතු කළ Products ලින්ක් එක */}
+          <Link to="/products" className="hover:text-cyan-400 transition-colors">Products</Link>
           <Link to="/cart" className="hover:text-cyan-400 transition-colors">Cart</Link>
           <Link to="/about" className="hover:text-cyan-400 transition-colors">About Us</Link>
           <Link to="/contact" className="hover:text-cyan-400 transition-colors">Contact Us</Link>

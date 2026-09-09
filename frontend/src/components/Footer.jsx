@@ -12,6 +12,8 @@ const Footer = () => {
           <h3 className="text-xl font-bold text-white mb-4">Links</h3>
           <ul className="flex flex-col gap-2">
             <li><Link to="/" className="hover:text-white transition">Home</Link></li>
+            {/* අලුතින් එකතු කළ Products ලින්ක් එක */}
+            <li><Link to="/products" className="hover:text-white transition">Products</Link></li>
             <li><Link to="/about" className="hover:text-white transition">About Us</Link></li>
             <li><Link to="/contact" className="hover:text-white transition">Contact Us</Link></li>
           </ul>

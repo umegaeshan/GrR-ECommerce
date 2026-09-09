@@ -12,6 +12,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
+import Products from './pages/Products';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
             <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
             <Route path="/product/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/products" element={<ProtectedRoute><Products /></ProtectedRoute>} />
           
         </Routes>
       </div>
