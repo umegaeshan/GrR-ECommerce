@@ -8,9 +8,6 @@ const connectDB = async () =>{
     catch(error){
         console.error(`Error ${error.message}`);
         process.exit();
-    }
-
-    
+    }   
 }
-
 export default connectDB;

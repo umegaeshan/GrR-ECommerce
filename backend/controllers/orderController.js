@@ -6,7 +6,7 @@ export const createOrder = async (req, res) => {
         const { orderItems, totalPrice } = req.body;
 
         if (orderItems && orderItems.length === 0) {
-            return res.status(400).json({ message: "Order එකේ කිසිම භාණ්ඩයක් නැත" });
+            return res.status(400).json({ message: "Order has no items" });
         }
 
         const order = await Order.create({

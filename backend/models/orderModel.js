@@ -2,7 +2,12 @@ import mongoose from 'mongoose'
 
 const orderShema = new mongoose.Schema(
     {
-        user:{type:mongoose.Schema.Types.ObjectId, ref:'User' ,required:true},
+        user:{
+            type:mongoose.Schema.Types.ObjectId, 
+            ref:'User' ,
+            required:true
+        },
+
         orderItems:[
             {
                 name:{type:String , required:true},
@@ -11,9 +16,24 @@ const orderShema = new mongoose.Schema(
                 product:{ type:mongoose.Schema.ObjectId, ref:'Product' , required:true},
             }
         ],
-        totalPrices:{type:Number , required:true , default:0.0},
-        isPaid:{type:Boolean , required:true , default:false},
-        isDelivered:{type:Boolean ,  required:true , default:false}
+
+        totalPrices:{
+            type:Number , 
+            required:true , 
+            default:0.0
+        },
+        
+        isPaid:{
+            type:Boolean , 
+            required:true , 
+            default:false
+        },
+
+        isDelivered:{
+            type:Boolean ,  
+            required:true , 
+            default:false
+        }
     },
     {
         timestamps:true
