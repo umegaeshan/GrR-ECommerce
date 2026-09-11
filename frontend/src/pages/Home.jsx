@@ -31,12 +31,12 @@ const Home = () => {
   };
 
   return (
-    <div className="font-sans text-gray-800 bg-gray-50 min-h-screen">
+    <div className="font-sans text-gray-800 bg-gray-50 min-h-screen ">
       
       {/* 1. Modern Hero Section (Background Image සහිතව) */}
       <div 
         className="relative h-[60vh] md:h-[75vh] flex items-center justify-center bg-cover bg-center bg-fixed"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop')" }} 
+        style={{ backgroundImage: "url('https://images.pexels.com/photos/6214128/pexels-photo-6214128.jpeg')" }} 
       >
         {/* අකුරු පැහැදිලිව පෙනීම සඳහා යොදන අඳුරු ආවරණය (Gradient Overlay) */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-gray-900/90"></div>
@@ -66,7 +66,7 @@ const Home = () => {
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {products.map((product) => (
+          {products.slice(0, 4).map((product) => (
             <div 
               key={product._id} 
               className="group bg-white rounded-2xl shadow-sm hover:shadow-2xl overflow-hidden transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 relative flex flex-col"
@@ -99,7 +99,7 @@ const Home = () => {
                 <div className="mt-auto">
                   <div className="flex justify-between items-center mb-5">
                     <span className="text-2xl font-black text-gray-900">
-                      රු. {product.price}
+                      Rs. {product.price}
                     </span>
                   </div>
                   

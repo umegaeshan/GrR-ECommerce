@@ -42,12 +42,13 @@ const Cart = () => {
       }
     } catch (error) {
       console.error("Checkout Error:", error);
-      alert("Error occurred while initiating checkout.");
+      // Backend එකෙන් එවන ඇත්තම දෝෂය Alert එකක් ලෙස පෙන්වීම
+      alert(error.response?.data?.message || "Error occurred while initiating checkout.");
     }
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto font-sans min-h-[75vh]">
+    <div className="p-8 max-w-6xl mx-auto font-sans min-h-[75vh] pt-36">
       <h2 className="text-3xl font-extrabold mb-8 text-gray-900 border-b pb-4">Shopping Cart</h2>
       
       {cartItems.length === 0 ? (
