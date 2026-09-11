@@ -53,7 +53,7 @@ const ProductDetails = () => {
 
   return (
     <div className="p-8 max-w-6xl mx-auto font-sans min-h-[70vh] pt-40">
-      <Link to="/" className="text-gray-500 hover:text-gray-900 font-bold mb-6 inline-block">
+      <Link to="/products" className="text-gray-500 hover:text-gray-900 font-bold mb-6 inline-block">
         &larr; Back to Products
       </Link>
 
@@ -94,7 +94,7 @@ const ProductDetails = () => {
             </p>
 
             <div className="text-3xl font-extrabold text-green-600 mb-6">
-              රු. {product.price}
+              Rs. {product.price}
             </div>
 
             <div className="mb-6 flex items-center gap-3">
