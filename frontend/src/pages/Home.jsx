@@ -99,7 +99,7 @@ const Home = () => {
                 <div className="mt-auto">
                   <div className="flex justify-between items-center mb-5">
                     <span className="text-2xl font-black text-gray-900">
-                      රු. {product.price}
+                      Rs. {product.price}
                     </span>
                   </div>
                   
