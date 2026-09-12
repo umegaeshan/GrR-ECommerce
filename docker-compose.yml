@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  # 1. Backend සර්වර් එක
+  backend:
+    build: ./backend # backend ෆෝල්ඩරයේ ඇති Dockerfile එක පාවිච්චි කරන්න
+    ports:
+      - "5000:5000" # පරිගණකයේ 5000 පෝට් එක Docker එකේ 5000 ට සම්බන්ධ කිරීම
+    env_file:
+      - ./backend/.env # Database එකට යන්න .env ෆයිල් එක ලබා දීම
+    environment:
+      - PORT=5000
+
+  # 2. Frontend සර්වර් එක
+  frontend:
+    build: ./frontend # frontend ෆෝල්ඩරයේ ඇති Dockerfile එක පාවිච්චි කරන්න
+    ports:
+      - "80:80" # Nginx සාමාන්‍යයෙන් වැඩ කරන්නේ 80 පෝට් එකෙන් (localhost)
+    depends_on:
+      - backend # Backend එක ඔන් වුණාට පස්සේ Frontend එක ඔන් කරන්න

@@ -1,5 +1,5 @@
 import express from 'express';
-import { createOrder, getOrders } from '../controllers/orderController.js';
+import { createOrder, getOrders ,updateOrderToDelivered } from '../controllers/orderController.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -9,5 +9,7 @@ router.post('/', protect, createOrder);
 
 // Admin ට ඔක්කොම Orders බලාගන්න (ලොගින් වෙලා, Admin කෙනෙකුත් වෙන්න ඕනේ)
 router.get('/', protect, admin, getOrders);
+
+router.put('/:id/deliver', protect, admin, updateOrderToDelivered);
 
 export default router;

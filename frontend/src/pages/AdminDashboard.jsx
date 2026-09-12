@@ -6,6 +6,9 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('userInfo'));
 
+  // 🔴 API Base URL එක මෙතනින් සකස් කර ඇත (Docker/Production වලදී පහසු වීමට)
+  const BASE_URL = 'http://localhost:5000/api';
+
   const [activeTab, setActiveTab] = useState('addProduct');
   const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
@@ -29,6 +32,8 @@ const AdminDashboard = () => {
   const [editUserEmail, setEditUserEmail] = useState('');
   const [editUserIsAdmin, setEditUserIsAdmin] = useState(false);
 
+  const [orders, setOrders] = useState([]);
+
   if (!user || !user.isAdmin) {
     return (
       <div className="text-center p-10 mt-10">
@@ -40,12 +45,16 @@ const AdminDashboard = () => {
 
   const config = { headers: { Authorization: `Bearer ${user.token}` } };
 
-  const fetchProducts = () => axios.get('http://localhost:5000/api/products').then((res) => setProducts(res.data));
-  const fetchUsers = () => axios.get('http://localhost:5000/api/users', config).then((res) => setUsers(res.data));
+  // API Calls සඳහා BASE_URL භාවිතා කර ඇත
+  const fetchProducts = () => axios.get(`${BASE_URL}/products`).then((res) => setProducts(res.data));
+  const fetchUsers = () => axios.get(`${BASE_URL}/users`, config).then((res) => setUsers(res.data));
+  const fetchOrders = () => axios.get(`${BASE_URL}/orders`, config).then((res) => setOrders(res.data));
 
   useEffect(() => {
     if (activeTab === 'manageProducts') fetchProducts();
     if (activeTab === 'manageUsers') fetchUsers();
+    if (activeTab === 'manageOrders') fetchOrders();
+
     setEditingProduct(null);
     setEditingUser(null);
   }, [activeTab]);
@@ -53,7 +62,7 @@ const AdminDashboard = () => {
   const deleteProduct = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/products/${id}`, config);
+        await axios.delete(`${BASE_URL}/products/${id}`, config);
         setProducts(products.filter((p) => p._id !== id));
         alert('Product deleted successfully!');
       } catch (error) {
@@ -81,7 +90,7 @@ const AdminDashboard = () => {
       const imagesArray = [image2, image3, image4].filter(img => img.trim() !== '');
 
       const productData = {
-        user: user._id, // <--- මේ පේළිය අනිවාර්යයෙන්ම එකතු කරන්න
+        user: user._id, 
         name,
         description,
         price: Number(price),
@@ -92,12 +101,12 @@ const AdminDashboard = () => {
       };
 
       if (editingProduct) {
-        await axios.put(`http://localhost:5000/api/products/${editingProduct}`, productData, config);
+        await axios.put(`${BASE_URL}/products/${editingProduct}`, productData, config);
         alert('Product updated successfully!');
         setEditingProduct(null);
         fetchProducts();
       } else {
-        await axios.post('http://localhost:5000/api/products', productData, config);
+        await axios.post(`${BASE_URL}/products`, productData, config);
         alert('Product added successfully!');
       }
 
@@ -110,7 +119,7 @@ const AdminDashboard = () => {
   const deleteUserAction = async (id) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/users/${id}`, config);
+        await axios.delete(`${BASE_URL}/users/${id}`, config);
         setUsers(users.filter((u) => u._id !== id));
         alert('User deleted successfully!');
       } catch (error) {
@@ -129,7 +138,7 @@ const AdminDashboard = () => {
   const submitUserHandler = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/api/users/${editingUser}`, {
+      await axios.put(`${BASE_URL}/users/${editingUser}`, {
         name: editUserName, email: editUserEmail, isAdmin: editUserIsAdmin
       }, config);
       alert('User updated successfully!');
@@ -137,6 +146,18 @@ const AdminDashboard = () => {
       fetchUsers();
     } catch (error) {
       alert('Failed to update user!');
+    }
+  };
+
+  const deliverOrderHandler = async (id) => {
+    if (window.confirm('මෙම ඇණවුම බෙදාහැරිය බව තහවුරු කරනවාද?')) {
+      try {
+        await axios.put(`${BASE_URL}/orders/${id}/deliver`, {}, config);
+        alert('ඇණවුම යාවත්කාලීන කරන ලදී!');
+        fetchOrders();
+      } catch (error) {
+        alert('යාවත්කාලීන කිරීම අසාර්ථකයි!');
+      }
     }
   };
 
@@ -151,6 +172,7 @@ const AdminDashboard = () => {
         <button onClick={() => setActiveTab('addProduct')} className={`px-6 py-2 font-bold rounded-lg transition ${activeTab === 'addProduct' ? 'bg-gray-900 text-white shadow-md' : 'bg-gray-200 hover:bg-gray-300'}`}>Add Product</button>
         <button onClick={() => setActiveTab('manageProducts')} className={`px-6 py-2 font-bold rounded-lg transition ${activeTab === 'manageProducts' ? 'bg-gray-900 text-white shadow-md' : 'bg-gray-200 hover:bg-gray-300'}`}>Manage Products</button>
         <button onClick={() => setActiveTab('manageUsers')} className={`px-6 py-2 font-bold rounded-lg transition ${activeTab === 'manageUsers' ? 'bg-gray-900 text-white shadow-md' : 'bg-gray-200 hover:bg-gray-300'}`}>Manage Users</button>
+        <button onClick={() => setActiveTab('manageOrders')} className={`px-6 py-2 font-bold rounded-lg transition ${activeTab === 'manageOrders' ? 'bg-gray-900 text-white shadow-md' : 'bg-gray-200 hover:bg-gray-300'}`}>Manage Orders</button>
       </div>
 
       <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
@@ -262,15 +284,57 @@ const AdminDashboard = () => {
                       <td className="p-3 font-bold text-gray-800">{u.name}</td>
                       <td className="p-3 text-gray-600">{u.email}</td>
                       <td className="p-3">{u.isAdmin ? <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-bold">Yes</span> : <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm font-bold">No</span>}</td>
-                      <td className="p-3">
-                        <button onClick={() => handleEditUserClick(u)} className="bg-blue-500 text-white px-3 py-1 rounded font-bold text-sm">Edit</button>
-                      </td>
                       <td className="p-3 flex gap-2">
                         <button onClick={() => handleEditUserClick(u)} className="bg-blue-500 text-white px-3 py-1 rounded font-bold text-sm">Edit</button>
                         <button onClick={() => deleteUserAction(u._id)} className="bg-red-500 text-white px-3 py-1 rounded font-bold text-sm">Delete</button>
                       </td>
                     </tr>
                   ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* 4. Manage Orders Tab */}
+        {activeTab === 'manageOrders' && (
+          <div>
+            <h2 className="text-xl font-bold mb-6 text-gray-700 border-b pb-2">Manage Orders</h2>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-gray-100 border-b">
+                    <th className="p-3">Order ID</th>
+                    <th className="p-3">User</th>
+                    <th className="p-3">Total Price</th>
+                    <th className="p-3">Payment Status</th>
+                    <th className="p-3">Delivery Status</th>
+                    <th className="p-3">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map(order => (
+                    <tr key={order._id} className="border-b hover:bg-gray-50">
+                      <td className="p-3 font-mono text-sm">{order._id}</td>
+                      <td className="p-3">{order.user && order.user.name}</td>
+                      <td className="p-3 font-bold text-green-600">Rs. {order.totalPrice}</td>
+                      <td className="p-3">
+                        {order.isPaid ? <span className="text-green-600 font-bold">Paid</span> : <span className="text-red-500 font-bold">Not Paid</span>}
+                      </td>
+                      <td className="p-3">
+                        {order.isDelivered ? <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">Delivered</span> : <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-bold">Pending</span>}
+                      </td>
+                      <td className="p-3">
+                        {!order.isDelivered && (
+                          <button onClick={() => deliverOrderHandler(order._id)} className="bg-blue-600 text-white px-3 py-1 rounded font-bold text-sm hover:bg-blue-700">
+                            Mark Delivered
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                  {orders.length === 0 && <tr><td colSpan="6" className="p-4 text-center">ඇණවුම් කිසිවක් නොමැත</td></tr>}
                 </tbody>
               </table>
             </div>
