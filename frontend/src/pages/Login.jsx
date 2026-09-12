@@ -15,7 +15,8 @@ const Login = () => {
   const handleNormalLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('${API_URL}/api/users/login', { name, password });
+      // 🔴 වෙනස: තනි කොමා වෙනුවට Backticks ( `` ) යොදා ඇත
+      const response = await axios.post(`${API_URL}/api/users/login`, { name, password });
       
       localStorage.setItem('userInfo', JSON.stringify(response.data));
       alert('Successfully logged in!');
@@ -35,7 +36,8 @@ const Login = () => {
   // 2. Google Login සාර්ථක වූ විට
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
-      const response = await axios.post('${API_URL}/api/users/google', {
+      // 🔴 වෙනස: තනි කොමා වෙනුවට Backticks ( `` ) යොදා ඇත
+      const response = await axios.post(`${API_URL}/api/users/google`, {
         token: credentialResponse.credential,
       });
       
@@ -43,10 +45,10 @@ const Login = () => {
       alert('Successfully logged in with Google!');
       
       // මෙතනදිත් Admin ද කියලා බලලා අදාළ පිටුවට යවනවා
-     if (response.data.isAdmin) {
-        window.location.href = '/admin'; // <--- මේක වෙනස් කරන්න
+      if (response.data.isAdmin) {
+        window.location.href = '/admin'; 
       } else {
-        window.location.href = '/'; // <--- මේක වෙනස් කරන්න
+        window.location.href = '/'; 
       }
       
     } catch (error) {

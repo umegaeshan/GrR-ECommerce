@@ -10,16 +10,15 @@ const ProductDetails = () => {
 
   const API_URL = 'https://grr-backend.onrender.com';
   
-  // States අලුතින් එකතු කළේ
   const [selectedImage, setSelectedImage] = useState('');
-  const [qty, setQty] = useState(1); // ප්‍රමාණය (Quantity)
+  const [qty, setQty] = useState(1); 
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        // 🔴 වෙනස: තනි කොමා වෙනුවට Backticks ( `` ) යොදා ඇත
         const response = await axios.get(`${API_URL}/api/products/${id}`);
         setProduct(response.data);
-        // මුලින්ම පෙන්වන්නේ ප්‍රධාන image එකයි. වෙනත් images නැත්නම් ප්‍රධාන එකම ගන්නවා.
         setSelectedImage(response.data.image);
         setLoading(false);
       } catch (error) {
@@ -30,16 +29,13 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
-  // Cart එකට Quantity එකත් එක්ක දාන Function එක
   const addToCart = () => {
     const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
     const existItemIndex = cartItems.findIndex((x) => x._id === product._id);
     
     if (existItemIndex >= 0) {
-       // කලින් තිබුණ නම් Quantity එක අලුත් අගයට යාවත්කාලීන කරනවා
        cartItems[existItemIndex].qty = qty;
     } else {
-       // අලුතින් එකතු කරනවා
        cartItems.push({ ...product, qty });
     }
     
@@ -50,7 +46,6 @@ const ProductDetails = () => {
 
   if (loading) return <div className="text-center p-10 font-bold text-xl">Loading...</div>;
 
-  // උදාහරණයක් ලෙස අමතර පින්තූර නැත්නම් ප්‍රධාන පින්තූරයම මත පදනම්ව වෙනත් වර්ණ/පින්තූර පෙන්වීමට 배열 එකක් හදාගමු
   const images = product.images && product.images.length > 0 ? product.images : [product.image];
 
   return (
@@ -61,7 +56,6 @@ const ProductDetails = () => {
 
       <div className="flex flex-col md:flex-row gap-10 bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
         
-        {/* පින්තූර පෙන්වන කොටස (Images Gallery) */}
         <div className="md:w-1/2 flex flex-col gap-4">
           <div className="border rounded-xl overflow-hidden shadow-sm bg-gray-50 flex items-center justify-center p-4">
             <img 
@@ -71,7 +65,6 @@ const ProductDetails = () => {
             />
           </div>
           
-          {/* කුඩා පින්තූර (Thumbnails) මාරු කර බැලීමට */}
           <div className="flex gap-3 overflow-x-auto pb-2">
             {images.map((img, index) => (
               <img 
@@ -85,7 +78,6 @@ const ProductDetails = () => {
           </div>
         </div>
 
-        {/* භාණ්ඩයේ විස්තර සහ Quantity පාලනය */}
         <div className="md:w-1/2 flex flex-col justify-between">
           <div>
             <h2 className="text-3xl font-extrabold text-gray-900 mb-2">{product.name}</h2>
@@ -108,7 +100,6 @@ const ProductDetails = () => {
               )}
             </div>
 
-            {/* Quantity වෙනස් කිරීමේ කොටස */}
             {product.countInStock > 0 && (
               <div className="mb-6 flex items-center gap-4">
                 <span className="font-bold text-gray-700">Quantity:</span>

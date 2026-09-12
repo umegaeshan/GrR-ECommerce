@@ -10,7 +10,8 @@ const Home = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('${API_URL}/api/products');
+        // 🔴 වෙනස: තනි කොමා වෙනුවට Backticks ( `` ) යොදා ඇත
+        const response = await axios.get(`${API_URL}/api/products`);
         setProducts(response.data);
       } catch (error) {
         console.error("Products Fetching Error:", error);
@@ -35,12 +36,10 @@ const Home = () => {
   return (
     <div className="font-sans text-gray-800 bg-gray-50 min-h-screen ">
       
-      {/* 1. Modern Hero Section (Background Image සහිතව) */}
       <div 
         className="relative h-[60vh] md:h-[75vh] flex items-center justify-center bg-cover bg-center bg-fixed"
         style={{ backgroundImage: "url('https://images.pexels.com/photos/6214128/pexels-photo-6214128.jpeg')" }} 
       >
-        {/* අකුරු පැහැදිලිව පෙනීම සඳහා යොදන අඳුරු ආවරණය (Gradient Overlay) */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-gray-900/90"></div>
         
         <div className="relative z-10 text-center px-4 mt-10">
@@ -59,7 +58,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* 2. Product Grid Section */}
       <div id="products" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="flex justify-between items-end mb-12 border-b border-gray-200 pb-4">
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
@@ -73,12 +71,10 @@ const Home = () => {
               key={product._id} 
               className="group bg-white rounded-2xl shadow-sm hover:shadow-2xl overflow-hidden transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 relative flex flex-col"
             >
-              {/* "New" Badge එක */}
               <div className="absolute top-4 right-4 z-10 bg-black/80 text-white text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm">
                 New
               </div>
 
-              {/* පින්තූරය සඳහා Hover Effect (Zoom වීම) */}
               <Link to={`/product/${product._id}`} className="block relative overflow-hidden h-56">
                 <img 
                   src={product.image} 
@@ -109,7 +105,6 @@ const Home = () => {
                     onClick={() => addToCart(product)} 
                     className="w-full bg-gray-900 hover:bg-green-500 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 flex justify-center items-center gap-2"
                   >
-                    {/* Cart Icon එක */}
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                     Add to Cart
                   </button>
