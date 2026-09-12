@@ -5,10 +5,12 @@ import axios from 'axios';
 const Home = () => {
   const [products, setProducts] = useState([]);
 
+  const API_URL = 'https://grr-backend.onrender.com';
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/products');
+        const response = await axios.get('${API_URL}/api/products');
         setProducts(response.data);
       } catch (error) {
         console.error("Products Fetching Error:", error);

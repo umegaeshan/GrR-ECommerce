@@ -7,6 +7,8 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const [product, setProduct] = useState({});
   const [loading, setLoading] = useState(true);
+
+  const API_URL = 'https://grr-backend.onrender.com';
   
   // States අලුතින් එකතු කළේ
   const [selectedImage, setSelectedImage] = useState('');
@@ -15,7 +17,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const response = await axios.get(`${API_URL}/api/products/${id}`);
         setProduct(response.data);
         // මුලින්ම පෙන්වන්නේ ප්‍රධාන image එකයි. වෙනත් images නැත්නම් ප්‍රධාන එකම ගන්නවා.
         setSelectedImage(response.data.image);

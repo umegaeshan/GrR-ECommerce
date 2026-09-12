@@ -8,10 +8,12 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  const API_URL = 'https://grr-backend.onrender.com';
+
 const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/users/register', { 
+      await axios.post(`${API_URL}/api/users/register`, { 
         name, 
         email, 
         password 
