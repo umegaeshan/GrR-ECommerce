@@ -299,18 +299,18 @@ const AdminDashboard = () => {
         {/* 4. Manage Orders Tab */}
         {activeTab === 'manageOrders' && (
           <div>
-            <h2 className="text-xl font-bold mb-6 text-gray-700 border-b pb-2">ඇණවුම් කළමනාකරණය</h2>
+            <h2 className="text-xl font-bold mb-6 text-gray-700 border-b pb-2">Manage Orders</h2>
             
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-gray-100 border-b">
                     <th className="p-3">Order ID</th>
-                    <th className="p-3">පරිශීලකයා</th>
-                    <th className="p-3">මුළු මුදල</th>
-                    <th className="p-3">ගෙවීම් තත්ත්වය</th>
-                    <th className="p-3">බෙදාහැරීම</th>
-                    <th className="p-3">ක්‍රියාව</th>
+                    <th className="p-3">User</th>
+                    <th className="p-3">Total Price</th>
+                    <th className="p-3">Payment Status</th>
+                    <th className="p-3">Delivery Status</th>
+                    <th className="p-3">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -318,9 +318,9 @@ const AdminDashboard = () => {
                     <tr key={order._id} className="border-b hover:bg-gray-50">
                       <td className="p-3 font-mono text-sm">{order._id}</td>
                       <td className="p-3">{order.user && order.user.name}</td>
-                      <td className="p-3 font-bold text-green-600">රු. {order.totalPrice}</td>
+                      <td className="p-3 font-bold text-green-600">Rs. {order.totalPrice}</td>
                       <td className="p-3">
-                        {order.isPaid ? <span className="text-green-600 font-bold">ගෙවා ඇත</span> : <span className="text-red-500 font-bold">ගෙවා නැත</span>}
+                        {order.isPaid ? <span className="text-green-600 font-bold">Paid</span> : <span className="text-red-500 font-bold">Not Paid</span>}
                       </td>
                       <td className="p-3">
                         {order.isDelivered ? <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">Delivered</span> : <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-bold">Pending</span>}
