@@ -150,13 +150,13 @@ const AdminDashboard = () => {
   };
 
   const deliverOrderHandler = async (id) => {
-    if (window.confirm('මෙම ඇණවුම බෙදාහැරිය බව තහවුරු කරනවාද?')) {
+    if (window.confirm('Are you sure you want to mark this order as delivered?')) {
       try {
         await axios.put(`${BASE_URL}/orders/${id}/deliver`, {}, config);
-        alert('ඇණවුම යාවත්කාලීන කරන ලදී!');
+        alert('Order marked as delivered!');
         fetchOrders();
       } catch (error) {
-        alert('යාවත්කාලීන කිරීම අසාර්ථකයි!');
+        alert('Failed to update order!');
       }
     }
   };
