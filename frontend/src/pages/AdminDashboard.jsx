@@ -334,7 +334,7 @@ const AdminDashboard = () => {
                       </td>
                     </tr>
                   ))}
-                  {orders.length === 0 && <tr><td colSpan="6" className="p-4 text-center">ඇණවුම් කිසිවක් නොමැත</td></tr>}
+                  {orders.length === 0 && <tr><td colSpan="6" className="p-4 text-center">No orders found</td></tr>}
                 </tbody>
               </table>
             </div>
