@@ -5,6 +5,8 @@ import axios from 'axios';
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
 
+  const API_URL = 'https://grr-backend.onrender.com';
+
   useEffect(() => {
     const items = JSON.parse(localStorage.getItem('cartItems')) || [];
     setCartItems(items);
@@ -34,7 +36,7 @@ const Cart = () => {
 
   const handleCheckout = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/stripe/create-checkout-session', {
+      const response = await axios.post('${API_URL}/api/stripe/create-checkout-session', {
         cartItems,
       });
       if (response.data.url) {
@@ -70,7 +72,7 @@ const Cart = () => {
                   <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded-xl border bg-gray-50 p-1" />
                   <div>
                     <h3 className="text-lg font-bold text-gray-800">{item.name}</h3>
-                    <p className="text-green-600 font-extrabold mt-1">රු. {item.price}</p>
+                    <p className="text-green-600 font-extrabold mt-1">Rs. {item.price}</p>
                   </div>
                 </div>
 
