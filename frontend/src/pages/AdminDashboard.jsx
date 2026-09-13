@@ -6,8 +6,8 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('userInfo'));
 
-  // 🔴 API Base URL එක මෙතනින් සකස් කර ඇත (Docker/Production වලදී පහසු වීමට)
-  const BASE_URL = 'http://localhost:5000/api';
+  // 🔴 API Base URL එක Render Production ලින්ක් එකට යාවත්කාලීන කර ඇත
+  const BASE_URL = 'https://grr-backend.onrender.com/api';
 
   const [activeTab, setActiveTab] = useState('addProduct');
   const [products, setProducts] = useState([]);
@@ -236,7 +236,7 @@ const AdminDashboard = () => {
                     <tr key={product._id} className="border-b hover:bg-gray-50">
                       <td className="p-3"><img src={product.image} alt={product.name} className="w-12 h-12 object-cover rounded shadow-sm" /></td>
                       <td className="p-3 font-bold text-gray-800">{product.name}</td>
-                      <td className="p-3 text-green-600 font-bold">රු. {product.price}</td>
+                      <td className="p-3 text-green-600 font-bold">Rs. {product.price}</td>
                       <td className="p-3">{product.countInStock}</td>
                       <td className="p-3 flex gap-2">
                         <button onClick={() => handleEditProductClick(product)} className="bg-blue-500 text-white px-3 py-1 rounded font-bold text-sm">Edit</button>
