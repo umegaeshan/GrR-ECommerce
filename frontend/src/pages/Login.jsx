@@ -37,9 +37,9 @@ const Login = () => {
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       // 🔴 වෙනස: තනි කොමා වෙනුවට Backticks ( `` ) යොදා ඇත
-      const response = await axios.post(`${API_URL}/api/users/google`, {
-        token: credentialResponse.credential,
-      });
+     const response = await axios.post(`${API_URL}/api/users/google`, {
+  token: credentialResponse.credential,
+});
       
       localStorage.setItem('userInfo', JSON.stringify(response.data));
       alert('Successfully logged in with Google!');
