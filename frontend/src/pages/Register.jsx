@@ -13,17 +13,15 @@ const Register = () => {
 const handleRegister = async (e) => {
     e.preventDefault();
     try {
+      // 🔴 වෙනස: තනි කොමා වෙනුවට Backticks ( `` ) යොදා ඇත
       await axios.post(`${API_URL}/api/users/register`, { 
         name, 
         email, 
         password 
       });
-      
-      // මෙතන තිබුණ localStorage.setItem(...) පේළිය අනිවාර්යයෙන්ම අයින් කළ යුතුයි!
-      // එසේ නොකළහොත් Register වූ ගමන් පද්ධතිය ඔහුව Logged In කෙනෙක් ලෙස සලකයි.
 
       alert('Successfully registered! Please login.');
-      window.location.href = '/login'; // navigate වෙනුවට මෙය යොදන්න
+      window.location.href = '/login'; 
     } catch (error) {
       alert(error.response?.data?.message || 'Registration failed!');
     }

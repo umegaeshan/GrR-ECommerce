@@ -12,7 +12,6 @@ const Cart = () => {
     setCartItems(items);
   }, []);
 
-  // Quantity එක වෙනස් කිරීම Cart එක තුළදීම
   const updateQty = (id, newQty) => {
     const updatedCart = cartItems.map(item => {
       if (item._id === id) {
@@ -24,7 +23,6 @@ const Cart = () => {
     localStorage.setItem('cartItems', JSON.stringify(updatedCart));
   };
 
-  // Cart එකෙන් අයින් කිරීම
   const removeFromCart = (id) => {
     const updatedCart = cartItems.filter((item) => item._id !== id);
     setCartItems(updatedCart);
@@ -36,7 +34,8 @@ const Cart = () => {
 
   const handleCheckout = async () => {
     try {
-      const response = await axios.post('${API_URL}/api/stripe/create-checkout-session', {
+      // 🔴 වෙනස: තනි කොමා වෙනුවට Backticks ( `` ) යොදා ඇත
+      const response = await axios.post(`${API_URL}/api/stripe/create-checkout-session`, {
         cartItems,
       });
       if (response.data.url) {
@@ -44,7 +43,6 @@ const Cart = () => {
       }
     } catch (error) {
       console.error("Checkout Error:", error);
-      // Backend එකෙන් එවන ඇත්තම දෝෂය Alert එකක් ලෙස පෙන්වීම
       alert(error.response?.data?.message || "Error occurred while initiating checkout.");
     }
   };
@@ -63,7 +61,6 @@ const Cart = () => {
       ) : (
         <div className="flex flex-col lg:flex-row gap-8">
           
-          {/* භාණ්ඩ ලැයිස්තුව (Modern Cards) */}
           <div className="flex-1 flex flex-col gap-4">
             {cartItems.map((item) => (
               <div key={item._id} className="flex flex-col sm:flex-row items-center justify-between bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition gap-4">
@@ -77,7 +74,6 @@ const Cart = () => {
                 </div>
 
                 <div className="flex items-center justify-between w-full sm:w-auto gap-6">
-                  {/* Quantity Controller */}
                   <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
                     <button 
                       onClick={() => updateQty(item._id, item.qty > 1 ? item.qty - 1 : 1)}
@@ -94,7 +90,6 @@ const Cart = () => {
                     </button>
                   </div>
 
-                  {/* Remove Button */}
                   <button 
                     onClick={() => removeFromCart(item._id)}
                     className="text-red-500 hover:text-red-700 font-bold text-sm bg-red-50 px-3 py-2 rounded-lg transition"
@@ -107,7 +102,6 @@ const Cart = () => {
             ))}
           </div>
 
-          {/* ඇණවුම් සාරාංශය (Order Summary Sidebar) */}
           <div className="w-full lg:w-96 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-fit">
             <h3 className="text-xl font-bold border-b pb-4 mb-4 text-gray-800">Order Summary</h3>
             
