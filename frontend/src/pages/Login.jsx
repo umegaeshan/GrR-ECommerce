@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [name, setName] = useState('');
@@ -11,40 +10,37 @@ const Login = () => {
 
   const API_URL = 'https://grr-backend.onrender.com';
 
-  // 1. සාමාන්‍ය Login ක්‍රියාවලිය
+  // 1. සාමාන්‍ය Login ක්‍රියාවලිය (Username/Name හරහා)
   const handleNormalLogin = async (e) => {
     e.preventDefault();
     try {
-      // 🔴 වෙනස: තනි කොමා වෙනුවට Backticks ( `` ) යොදා ඇත
+      // Backend එකට name සහ password පමණක් යවයි
       const response = await axios.post(`${API_URL}/api/users/login`, { name, password });
       
       localStorage.setItem('userInfo', JSON.stringify(response.data));
       alert('Successfully logged in!');
       
-      // Admin කෙනෙක් නම් කෙලින්ම Admin Dashboard එකට යවනවා
       if (response.data.isAdmin) {
         navigate('/admin');
       } else {
-        navigate('/'); // සාමාන්‍ය කෙනෙක් නම් Home පිටුවට යවනවා
+        navigate('/'); 
       }
       
     } catch (error) {
-      alert('Invalid User Credentials!');
+      alert(error.response?.data?.message || 'Invalid Name or Password!');
     }
   };
 
   // 2. Google Login සාර්ථක වූ විට
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
-      // 🔴 වෙනස: තනි කොමා වෙනුවට Backticks ( `` ) යොදා ඇත
-     const response = await axios.post(`${API_URL}/api/users/google`, {
-  token: credentialResponse.credential,
-});
+      const response = await axios.post(`${API_URL}/api/users/google`, {
+        token: credentialResponse.credential,
+      });
       
       localStorage.setItem('userInfo', JSON.stringify(response.data));
       alert('Successfully logged in with Google!');
       
-      // මෙතනදිත් Admin ද කියලා බලලා අදාළ පිටුවට යවනවා
       if (response.data.isAdmin) {
         window.location.href = '/admin'; 
       } else {
@@ -61,14 +57,13 @@ const Login = () => {
       <div className="bg-white p-8 rounded-xl shadow-md w-96 border border-gray-100">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Login</h2>
         
-        {/* සාමාන්‍ය Login Form එක */}
         <form onSubmit={handleNormalLogin} className="flex flex-col gap-4 mb-6">
           <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2">Name</label>
+            <label className="block text-gray-700 text-sm font-bold mb-2">Username</label>
             <input 
               type="text" 
               className="w-full px-3 py-2 border rounded focus:outline-none focus:border-gray-900" 
-              placeholder="Enter your name"
+              placeholder="Enter your username"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required 
@@ -89,18 +84,16 @@ const Login = () => {
             Login
           </button>
           <div className="mt-6 text-center text-sm">
-          Create New Account? <Link to="/register" className="text-blue-600 hover:underline">Register</Link>
-        </div>
+            Create New Account? <Link to="/register" className="text-blue-600 hover:underline">Register</Link>
+          </div>
         </form>
 
-        {/* Google සහ සාමාන්‍ය Login වෙන් කරන ඉර */}
         <div className="flex items-center my-4">
           <div className="flex-grow border-t border-gray-300"></div>
           <span className="mx-4 text-gray-500 text-sm">or</span>
           <div className="flex-grow border-t border-gray-300"></div>
         </div>
 
-        {/* Google Login Button එක */}
         <div className="flex justify-center">
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
