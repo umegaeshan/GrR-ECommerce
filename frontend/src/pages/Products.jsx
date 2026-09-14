@@ -150,7 +150,7 @@ const Products = () => {
                 <div className="px-5 pb-5 pt-2 flex flex-col flex-grow justify-end">
                   <p className="text-sm text-gray-500 mb-4 line-clamp-2">{product.description}</p>
                   <div className="flex justify-between items-center mb-4">
-                    <span className="text-xl font-black text-green-600 tracking-tight">රු. {product.price}</span>
+                    <span className="text-xl font-black text-green-600 tracking-tight">Rs. {product.price}</span>
                   </div>
                   <Link 
                     to={`/product/${product._id}`} 
